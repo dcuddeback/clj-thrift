@@ -6,14 +6,26 @@
 
   :min-lein-version "2.0.0"
 
-  :dependencies [[org.clojure/clojure "1.5.1"]]
+  :source-paths ["src/clojure"]
+
+  :dependencies [[org.clojure/clojure "1.5.1"]
+                 [org.apache.thrift/libthrift "0.9.0"]]
+
 
   :profiles {:1.3 {:dependencies [[org.clojure/clojure "1.3.0"]]}
              :1.4 {:dependencies [[org.clojure/clojure "1.4.0"]]}
              :1.5 {:dependencies [[org.clojure/clojure "1.5.1"]]}
              :1.6 {:dependencies [[org.clojure/clojure "1.6.0-master-SNAPSHOT"]]}
+
+             :thrift0.8 {:dependencies [[org.apache.thrift/libthrift "0.8.0"]]}
+             :thrift0.9 {:dependencies [[org.apache.thrift/libthrift "0.9.0"]]}
+
+             :provided {:dependencies [[org.slf4j/slf4j-log4j12 "1.5.2"]]}
+
              :dev {:dependencies [[midje "1.5.1"]]
-                   :plugins [[lein-midje "3.0.1"]]}}
+                   :plugins [[lein-thriftc "0.1.0"]
+                             [lein-midje "3.0.1"]]
+                   :prep-tasks ["thriftc"]}}
 
   :repositories {"sonatype" {:url "http://oss.sonatype.org/content/repositories/releases"
                              :snapshots false
