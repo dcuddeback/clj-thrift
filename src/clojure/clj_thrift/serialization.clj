@@ -1,11 +1,18 @@
 (ns clj-thrift.serialization
+  "Functions for serializing and deserializing Thrift objects."
   (:import [org.apache.thrift TSerializer TDeserializer]))
 
 ;; ## Serializers
 
 (defn serializer
   "Returns a Thrift serializer. If provided with a protocol factory, that factory will be used.
-  Otherwise, the default protocol factory (binary) will be used."
+  Otherwise, the default protocol factory (binary) will be used.
+
+    ; constructs a serializer for the compact protocol
+    (serializer (protocol/compact))
+
+    ; constructs a serializer for the JSON protocol
+    (serializer (protocol/json))"
   ([]
    (TSerializer.))
   ([protocol-factory]
@@ -13,7 +20,13 @@
 
 (defn deserializer
   "Returns a Thrift deserializer. If provided with a protocol factory, that factory will be used.
-  Otherwise, the default protocol factory (binary) will be used."
+  Otherwise, the default protocol factory (binary) will be used.
+
+    ; constructs a deserializer for the compact protocol
+    (deserializer (protocol/compact))
+
+    ; constructs a deserializer for the JSON protocol
+    (deserializer (protocol/json))"
   ([]
    (TDeserializer.))
   ([protocol-factory]
@@ -56,7 +69,8 @@
   ([type buffer]
    (deserialize (deserializer) type buffer))
   ([deserializer type buffer]
-    (letfn [(deserialize-obj [object buffer]
-              (.deserialize deserializer object buffer)
-              object)]
-      (deserialize-obj (.newInstance type) buffer))))
+   ; Hide from the user the fact that Thrift deserialization is impure.
+   (letfn [(deserialize-obj [object buffer]
+             (.deserialize deserializer object buffer))]
+     (doto (.newInstance type)
+       (deserialize-obj buffer)))))

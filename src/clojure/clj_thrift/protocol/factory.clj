@@ -1,4 +1,9 @@
 (ns clj-thrift.protocol.factory
+  "Functions for constructing Thrift protocol factories.
+
+  Protocol factories are used to customize how Thrift objects are serialized. Thrift includes five
+  standard protocols: binary, compact, JSON, simple JSON, and tuple. Any one of the protocols can be
+  used when constructing a serializer or deserializer."
   (:import (org.apache.thrift.protocol TBinaryProtocol$Factory
                                        TCompactProtocol$Factory
                                        TJSONProtocol$Factory
