@@ -1,0 +1,20 @@
+language: clojure
+lein:     lein2
+script:   "lein2 with-profile $PROFILES midje"
+branches:
+  only:
+    - master
+jdk:
+  - openjdk6
+  - openjdk7
+  - oraclejdk7
+env:
+  - PROFILES="+1.3"
+  - PROFILES="+1.4"
+  - PROFILES="+1.5,+thrift0.8"
+  - PROFILES="+1.5,+thrift0.9"
+  - PROFILES="+1.6"
+matrix:
+  allow_failures:
+    - env: PROFILES="+1.5,+thrift0.8"
+    - env: PROFILES="+1.6"
