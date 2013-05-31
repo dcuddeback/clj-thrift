@@ -48,7 +48,7 @@
     (map f objects)"
   ([object]
    (serialize (serializer) object))
-  ([serializer object]
+  ([^TSerializer serializer object]
     (.serialize serializer object)))
 
 (defn deserialize
@@ -68,7 +68,7 @@
     (map f buffers)"
   ([type buffer]
    (deserialize (deserializer) type buffer))
-  ([deserializer type buffer]
+  ([^TDeserializer deserializer ^Class type buffer]
    ; Hide from the user the fact that Thrift deserialization is impure.
    (letfn [(deserialize-obj [object buffer]
              (.deserialize deserializer object buffer))]

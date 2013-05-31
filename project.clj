@@ -25,7 +25,11 @@
              :dev {:dependencies [[midje "1.5.1"]]
                    :plugins [[lein-thriftc "0.1.0"]
                              [lein-midje "3.0.1"]]
-                   :prep-tasks ["thriftc"]}}
+                   :prep-tasks ["thriftc"]}
+
+             :lint {:global-vars {*warn-on-reflection* true}}}
+
+  :aliases {"lint" ["with-profile" "+lint" "midje"]}
 
   :repositories {"sonatype" {:url "http://oss.sonatype.org/content/repositories/releases"
                              :snapshots false
