@@ -8,11 +8,10 @@
 
 
 (facts "serialization"
-  (tabular
-    (fact "should be symmetric"
-      (->> ?object
-        (t/serialize)
-        (t/deserialize (type ?object))) => ?object)
+  (tabular "should be symmetric"
+    (->> ?object
+      (t/serialize)
+      (t/deserialize (type ?object))) => ?object
 
     ?object
     ; TStruct
@@ -22,11 +21,10 @@
     (clj_thrift.fakes.Identity/name (clj_thrift.fakes.Name. "John" "Doe"))
     (clj_thrift.fakes.Identity/ssn "555-55-5555"))
 
-  (tabular
-    (fact "accepts pre-initialized serializer/deserializer"
-      (->> ?object
-        (t/serialize (TSerializer. ?p-factory))
-        (t/deserialize (TDeserializer. ?p-factory) (type ?object))) => ?object)
+  (tabular "accepts pre-initialized serializer/deserializer"
+    (->> ?object
+      (t/serialize (TSerializer. ?p-factory))
+      (t/deserialize (TDeserializer. ?p-factory) (type ?object))) => ?object
 
     ?object                               ?p-factory
     (clj_thrift.fakes.Name. "John" "Doe") (p/binary)
