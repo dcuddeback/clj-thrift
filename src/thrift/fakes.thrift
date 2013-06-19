@@ -10,6 +10,13 @@ union Identity {
   2: string ssn;
 }
 
+struct ExampleStruct {
+  3: string foo;
+  4: i32 bar;
+  5: double baz
+  7: list<byte> qux;
+}
+
 union ExampleUnion {
   3: string foo;
   5: i32 bar;
