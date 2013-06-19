@@ -9,3 +9,9 @@ union Identity {
   1: Name name;
   2: string ssn;
 }
+
+union ExampleUnion {
+  3: string foo;
+  5: i32 bar;
+  6: double baz;
+}

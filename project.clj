@@ -9,6 +9,7 @@
   :source-paths ["src/clojure"]
 
   :dependencies [[org.clojure/clojure "1.5.1"]
+                 [org.clojure/core.incubator "0.1.3"]
                  [org.apache.thrift/libthrift "0.9.0"]]
 
 
