@@ -5,7 +5,7 @@
 (defn- meta-data-map
   "Returns the `metaDataMap` field of Thrift class."
   [type]
-  (.. union-type
+  (.. type
     (getField "metaDataMap")
     (get nil)))
 
@@ -34,4 +34,4 @@
   "
   [type]
   (into #{} (map (comp #(.getThriftFieldId %) key)
-                 (meta-data-map union-type))))
+                 (meta-data-map type))))
