@@ -1,8 +1,8 @@
 (ns clj-thrift.base-test
-  (:require [clj-thrift.base :as base]
-            [midje.sweet :refer :all])
+  (:require [clj-thrift.base :as base])
   (:import (clj_thrift.fakes Person Name Identity ExampleStruct ExampleUnion Containers)
-           (java.nio ByteBuffer)))
+           (java.nio ByteBuffer))
+  (:use midje.sweet))
 
 
 (facts "build"
@@ -16,7 +16,7 @@
     Name          {:firstName "Jane"
                    :lastName "Smith"}     (Name. "Jane" "Smith")
     ExampleStruct {:foo "hello"
-                   :bar (int 42)
+                   :bar (Integer. 42)
                    :baz 10.0}             (ExampleStruct. "hello" 42 10.0 nil))
 
 
@@ -43,7 +43,7 @@
     ?type         ?attributes             ?result
     Identity      {:ssn "555-55-5555"}    (Identity/ssn "555-55-5555")
     ExampleUnion  {:foo "hello"}          (ExampleUnion/foo "hello")
-    ExampleUnion  {:bar (int 42)}         (ExampleUnion/bar 42)
+    ExampleUnion  {:bar (Integer. 42)}    (ExampleUnion/bar 42)
     ExampleUnion  {:baz 10.0}             (ExampleUnion/baz 10.0))
 
 
