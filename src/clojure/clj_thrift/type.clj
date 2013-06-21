@@ -1,10 +1,11 @@
 (ns clj-thrift.type
-  "Functions for working with Thrift types.")
+  "Functions for working with Thrift types."
+  (:import (org.apache.thrift TFieldIdEnum)))
 
 
 (defn- meta-data-map
   "Returns the `metaDataMap` field of Thrift class."
-  [type]
+  [#^Class type]
   (.. type
     (getField "metaDataMap")
     (get nil)))
@@ -33,5 +34,5 @@
     (field-ids ID)    ; => #{3 4 5}
   "
   [type]
-  (into #{} (map (comp #(.getThriftFieldId %) key)
+  (into #{} (map (comp #(.getThriftFieldId #^TFieldIdEnum %) key)
                  (meta-data-map type))))

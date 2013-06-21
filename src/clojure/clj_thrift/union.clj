@@ -1,5 +1,6 @@
 (ns clj-thrift.union
-  "Functions for working with Thrift unions.")
+  "Functions for working with Thrift unions."
+  (:import (org.apache.thrift TUnion)))
 
 (defn current-field-id
   "Returns the ID of a union's currently set field. For the following union, the return value will be
@@ -11,12 +12,12 @@
     }
 
   If no field is set on the union, `nil` will be returned."
-  [union]
+  [#^TUnion union]
   (when-let [field (.getSetField union)]
     (.getThriftFieldId field)))
 
 
 (defn current-value
   "Returns the value of a union's currently set field. If a field is not set, it will return `nil`."
-  [union]
+  [#^TUnion union]
   (.getFieldValue union (.getSetField union)))
