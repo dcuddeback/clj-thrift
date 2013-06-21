@@ -16,3 +16,8 @@
   (.?. union
     (getSetField)
     (getThriftFieldId)))
+
+(defn current-value
+  "Returns the value of a union's currently set field. If a field is not set, it will return `nil`."
+  [union]
+  (.getFieldValue union (.getSetField union)))

@@ -12,3 +12,12 @@
     (Identity/name (Name. "John" "Doe"))    1
     (Identity/ssn "555-55-5555")            2
     (Identity.)                             nil))
+
+(tabular "current-value"
+  (fact "returns the currently set field's value"
+    (union/current-value ?union) => ?value)
+
+  ?union                                ?value
+  (Identity/name (Name. "John" "Doe"))  (Name. "John" "Doe")
+  (Identity/ssn "555-55-5555")          "555-55-5555"
+  (Identity.)                           nil)
