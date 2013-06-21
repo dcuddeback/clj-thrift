@@ -10,6 +10,10 @@ union Identity {
   2: string ssn;
 }
 
+struct Person {
+  1: Identity identity
+}
+
 struct ExampleStruct {
   3: string foo;
   4: i32 bar;
@@ -21,4 +25,11 @@ union ExampleUnion {
   3: string foo;
   5: i32 bar;
   6: double baz;
+}
+
+union Containers {
+  1: list<i64> aList;
+  2: set<i64> aSet;
+  3: map<i64,string> aMap;
+  4: binary aBinary;
 }

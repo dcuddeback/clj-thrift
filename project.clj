@@ -26,7 +26,7 @@
              :dev {:dependencies [[midje "1.5.1"]]
                    :plugins [[lein-thriftc "0.1.0"]
                              [lein-midje "3.0.1"]]
-                   :prep-tasks ["thriftc"]}
+                   :prep-tasks ["thriftc" "javac" "compile"]}
 
              :lint {:global-vars {*warn-on-reflection* true}}}
 

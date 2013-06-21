@@ -11,6 +11,48 @@
     (get nil)))
 
 
+(defn- field-enum-map
+  [type]
+  (into {} (map (juxt (comp keyword #(.getFieldName %))
+                      identity)
+                (keys (meta-data-map type)))))
+
+(defn- field-meta-map
+  [type]
+  (into {} (map (juxt (comp keyword #(.getFieldName %) key)
+                      val)
+                (meta-data-map type))))
+
+(defn- field-meta
+  [type field-name]
+  (get (field-meta-map type) field-name))
+
+(defn- field-value
+  [type field-name]
+  (.valueMetaData (field-meta type field-name)))
+
+
+(defn field
+  [type field-name]
+  (get (field-enum-map type) field-name))
+
+(defn field-type
+  [type field-name]
+  (.structClass (field-value type field-name)))
+
+(defn struct-field?
+  [type field-name]
+  (.isStruct (field-value type field-name)))
+
+(defn container-field?
+  [type field-name]
+  (.isContainer (field-value type field-name)))
+
+(defn binary-field?
+  [type field-name]
+  (.isBinary (field-value type field-name)))
+
+
 (defn field-ids
   "Returns the set of ID numbers for the fields of a Thrift type. The function's argument should be
   the class itself. It works with structs and unions.
