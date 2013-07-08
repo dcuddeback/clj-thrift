@@ -24,6 +24,31 @@
 
 
 
+(facts "value!"
+  (tabular "sets a struct's field"
+    (fact (base/value! ?object ?field ?value) => ?result)
+
+    ?object               ?field      ?value    ?result
+    (Name. "John" "Doe")  :firstName  "Jane"    (Name. "Jane" "Doe")
+    (Name. "John" "Doe")  :lastName   "Smith"   (Name. "John" "Smith"))
+
+  (tabular "clears a struct's field"
+    (fact (base/value! ?object ?field nil) => ?result)
+
+    ?object                                     ?field      ?result
+    (Name. "John" "Doe")                        :firstName  (doto (Name.) (.setLastName "Doe"))
+    (Person. (Identity/ssn "555-55-5555"))      :identity   (Person.))
+
+  (tabular "sets a union's field"
+    (fact (base/value! ?object ?field ?value) => ?result)
+
+    ?object                       ?field      ?value                  ?result
+    (Identity.)                   :name       (Name. "John" "Doe")    (Identity/name (Name. "John" "Doe"))
+    (Identity/ssn "555-55-5555")  :name       (Name. "John" "Doe")    (Identity/name (Name. "John" "Doe"))
+    (Identity/name (Name.))       :ssn        "555-55-5555"           (Identity/ssn "555-55-5555")))
+
+
+
 (facts "build"
 
   (tabular "builds structs from maps"
@@ -42,10 +67,16 @@
   (tabular "builds empty structs"
     (fact (base/build ?type ?attributes) => ?result)
 
-    ?type         ?attributes             ?result
-    ExampleStruct {}                      (ExampleStruct.)
-    ExampleStruct nil                     (ExampleStruct.))
+    ?type         ?attributes   ?result
+    ExampleStruct {}            (ExampleStruct.))
 
+  (tabular "doesn't build structs for nil"
+    (fact (base/build ?type nil) => nil?)
+
+    ?type
+    Name
+    Person
+    ExampleStruct)
 
   (tabular "builds structs from existing structs"
     (fact (base/build ?type ?object) => ?object)
@@ -70,8 +101,15 @@
     (fact (base/build ?type ?attributes) => #(not (.isSet %)))
 
     ?type         ?attributes
-    ExampleUnion  {}
-    ExampleUnion  nil)
+    ExampleUnion  {})
+
+  (tabular "doesn't build unions for nil"
+    (fact (base/build ?type nil) => nil?)
+
+    ?type
+    Identity
+    ExampleUnion
+    Containers)
 
 
   (tabular "builds unions from existing unions"

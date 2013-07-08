@@ -21,14 +21,15 @@
 
 (defn build
   [type attributes]
-  (if (instance? type attributes)
-    attributes
-    (reduce (fn [object [field-name value]]
-              (value! object
-                      field-name
-                      (if (type/struct-field? type field-name)
-                        (let [sub-type (type/field-type type field-name)]
-                          (build sub-type value))
-                        value)))
-            (.newInstance type)
-            attributes)))
+  (when attributes
+    (if (instance? type attributes)
+      attributes
+      (reduce (fn [object [field-name value]]
+                (value! object
+                        field-name
+                        (if (type/struct-field? type field-name)
+                          (let [sub-type (type/field-type type field-name)]
+                            (build sub-type value))
+                          value)))
+              (.newInstance type)
+              attributes))))
