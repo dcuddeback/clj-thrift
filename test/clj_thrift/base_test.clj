@@ -5,6 +5,25 @@
   (:use midje.sweet))
 
 
+(facts "value"
+  (tabular "returns a struct field's value"
+    (fact (base/value ?object ?field) => ?value)
+
+    ?object                       ?field      ?value
+    (Name. "John" "Doe")          :firstName  "John"
+    (Name. "John" "Doe")          :lastName   "Doe"
+    (Name. "Jane" "Smith")        :firstName  "Jane"
+    (Name. "Jane" "Smith")        :lastName   "Smith"
+    (Name.)                       :firstName  nil)
+
+  (tabular "returns a union field's value"
+    (fact (base/value ?object ?field) => ?value)
+
+    ?object                       ?field      ?value
+    (Identity/ssn "555-55-5555")  :ssn        "555-55-5555"))
+
+
+
 (facts "build"
 
   (tabular "builds structs from maps"
