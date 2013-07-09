@@ -32,6 +32,9 @@
 
   :aliases {"lint" ["with-profile" "+lint" "midje"]}
 
+  ; Exclude the compiled Thrift classes from the Jar file.
+  :jar-exclusions [#"clj_thrift/fakes"]
+
   :repositories {"sonatype" {:url "http://oss.sonatype.org/content/repositories/releases"
                              :snapshots false
                              :releases {:checksum :fail :update :always}}
