@@ -1,4 +1,4 @@
-(defproject clj-thrift "0.1.0-SNAPSHOT"
+(defproject clj-thrift "0.1.0"
   :description "A Clojure abstraction for Thrift"
   :url "https://github.com/dcuddeback/clj-thrift"
   :license {:name "MIT License"
