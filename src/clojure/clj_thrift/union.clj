@@ -16,6 +16,11 @@
   (when-let [field (.getSetField union)]
     (.getThriftFieldId field)))
 
+(defn current-field-name
+  "Returns the field name of a unions currently set field."
+  [#^TUnion union]
+  (when-let [field (.getSetField union)]
+    (.getFieldName field)))
 
 (defn current-value
   "Returns the value of a union's currently set field. If a field is not set, it will return `nil`."
