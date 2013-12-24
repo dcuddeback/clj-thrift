@@ -78,3 +78,12 @@
   [type]
   (into #{} (map (comp #(.getThriftFieldId #^TFieldIdEnum %) key)
                  (meta-data-map type))))
+
+
+(defn field-names
+  "Returns the set of names for the fields of a Thrift type. The function's argument should be
+  the class itself. It works with structs and unions.
+  "
+  [type]
+  (into #{} (map (comp #(.getFieldName #^TFieldIdEnum %) key)
+                 (meta-data-map type))))

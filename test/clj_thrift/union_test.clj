@@ -21,3 +21,12 @@
   (Identity/name (Name. "John" "Doe"))  (Name. "John" "Doe")
   (Identity/ssn "555-55-5555")          "555-55-5555"
   (Identity.)                           nil)
+
+(facts "current-field-name"
+  (tabular "returns the currently set field's name"
+    (union/current-field-name ?union) => ?name
+
+    ?union                                  ?name
+    (Identity/name (Name. "John" "Doe"))    "name"
+    (Identity/ssn "555-55-5555")            "ssn"
+    (Identity.)                             nil))
