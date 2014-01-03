@@ -1,6 +1,6 @@
 (ns clj-thrift.base-test
   (:require [clj-thrift.base :as base])
-  (:import (clj_thrift.fakes Person Name Identity ExampleStruct ExampleUnion Containers)
+  (:import (clj_thrift.fakes Person Name Identity ExampleStruct ExampleUnion Containers ExampleAll)
            (java.nio ByteBuffer))
   (:use midje.sweet))
 
@@ -161,3 +161,48 @@
                      (map byte (range 10)))}) => (Containers/aBinary
                                                    (byte-array
                                                      (map byte (range 10))))))
+
+(facts "field-keys"
+  (tabular "returns a list of field keys for a struct or union"
+    (fact (base/field-keys ?object) => ?value)
+
+    ?object                       ?value
+    (Name. "John" "Doe")          [:firstName :lastName]
+    (Name. "John" "Doe")          [:firstName :lastName]
+    (Name. "Jane" "Smith")        [:firstName :lastName]
+    (Name. "Jane" "Smith")        [:firstName :lastName]
+    (Name.)                       [:firstName :lastName])
+
+  (tabular "returns a union field keys"
+    (fact (base/field-keys ?object) => ?value)
+
+    ?object                       ?value
+    (Identity/ssn "555-55-5555")  [:name :ssn]))
+
+
+(facts "property-union-value"
+  (tabular "Pulls current value from union one level below. Top Union.Struct.Union-with-value."
+           (fact (base/property-union-value (base/build ?type ?attributes) :identity) => ?result)
+
+    ?type         ?attributes                ?result
+    ExampleAll    {:person
+                    {:identity
+                    {:ssn "555-55-5555"}}}   "555-55-5555"))
+
+
+(facts "property-struct-value"
+  (tabular "Pulls current value from struct at top level. Top Union.Struct-with-value."
+           (fact (base/property-value (base/build ?type ?attributes) :foo) => ?result)
+
+    ?type         ?attributes                ?result
+    ExampleAll    {:examplestruct
+                    {:foo "bar"
+                     :baz 2.5}}               "bar")
+
+  (tabular "Pulls current value from struct at top level. Top Union.Struct-with-value."
+           (fact (base/property-value (base/build ?type ?attributes) :baz) => ?result)
+
+    ?type         ?attributes                ?result
+    ExampleAll    {:examplestruct
+                    {:foo "bar"
+                     :baz 2.5}}               2.5))

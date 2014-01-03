@@ -33,3 +33,9 @@ union Containers {
   3: map<i64,string> aMap;
   4: binary aBinary;
 }
+
+union ExampleAll {
+  1: Person person
+  2: ExampleStruct examplestruct
+  3: ExampleUnion exampleunion
+}
