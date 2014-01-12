@@ -22,29 +22,21 @@
     (type/field-names Name) => (just #{"firstName" "lastName"})
     (type/field-names ExampleStruct) => (just #{"foo" "bar" "baz" "qux"})))
 
-(facts "ordered-field-names"
-  (fact "returns a vector of valid field names for structs or unions"
-    (type/ordered-field-names Identity) => (just ["name" "ssn"])
-    (type/ordered-field-names ExampleUnion) => (just ["foo" "bar" "baz"]))
-
-  (fact "returns a vector of valid field ids for structs"
-    (type/ordered-field-names Name) => (just ["firstName" "lastName"])
-    (type/ordered-field-names ExampleStruct) => (just ["foo" "bar" "baz" "qux"])))
-
-(facts "field"
+(facts "field-id-meta"
     (fact "returns a field's id and name"
-       (type/field Identity "name") => (just {:id 1 :name "name" })
-       (type/field Identity "ssn") => (just {:id 2 :name  "ssn"})
-       (type/field ExampleStruct "foo") => (just {:id 3 :name "foo"})
-       (type/field ExampleStruct "bar") => (just {:id 4 :name  "bar"})
-       (type/field ExampleStruct "baz") => (just {:id 5 :name "baz"})
-       (type/field ExampleStruct "qux") => (just {:id 7 :name "qux"})))
+       (type/field-id-meta Identity "name") => (just {:id 1 :name "name" })
+       (type/field-id-meta Identity "ssn")  => (just {:id 2 :name "ssn"})
+       (type/field-id-meta ExampleStruct "foo") => (just {:id 3 :name "foo"})
+       (type/field-id-meta ExampleStruct "bar") => (just {:id 4 :name "bar"})
+       (type/field-id-meta ExampleStruct "baz") => (just {:id 5 :name "baz"})
+       (type/field-id-meta ExampleStruct "qux") => (just {:id 7 :name "qux"})
+       (type/field-id-meta Identity "missing") => nil?))
 
-(facts "fields-map"
+(facts "field-meta-list"
     (fact "returns a map of field id's and names for a structure or union"
-          (first (type/field-map Identity)) => (just {:id 1 :name "name" })
-          (last  (type/field-map Identity)) => (just {:id 2 :name  "ssn"})
-          (nth  (type/field-map ExampleStruct ) 0) => (just {:id 3 :name "foo" } )
-          (nth  (type/field-map ExampleStruct ) 1) => (just {:id 4 :name  "bar"} )
-          (nth  (type/field-map ExampleStruct ) 2) => (just {:id 5 :name "baz"} )
-          (nth  (type/field-map ExampleStruct ) 3) => (just {:id 7 :name "qux"})))
+          (nth (type/field-meta-list Identity) 0) => (just {:id 1 :name "name" })
+          (nth (type/field-meta-list Identity) 1) => (just {:id 2 :name  "ssn"})
+          (nth (type/field-meta-list ExampleStruct) 0) => (just {:id 3 :name "foo" } )
+          (nth (type/field-meta-list ExampleStruct) 1) => (just {:id 4 :name  "bar"} )
+          (nth (type/field-meta-list ExampleStruct) 2) => (just {:id 5 :name "baz"} )
+          (nth (type/field-meta-list ExampleStruct) 3) => (just {:id 7 :name "qux"})))

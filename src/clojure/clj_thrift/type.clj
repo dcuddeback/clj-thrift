@@ -11,7 +11,7 @@
     (get nil)))
 
 
-(defn- field-enum-map
+(defn-field-enum-map
   [type]
   (into {} (map (juxt (comp keyword #(.getFieldName %))
                       identity)
@@ -86,20 +86,12 @@
   (into #{} (map (comp #(.getFieldName #^TFieldIdEnum %) key)
                  (meta-data-map type))))
 
-; get ordered field names and ids to facilitate Creation of Cascalog taps and operators.
-(defn ordered-field-names
-  "Returns a vector of names for the fields of a Thrift type. The function's argument should be
-  the class itself. It works with structs and unions. "
-  [type]
-  "Give an ordered vector of field names for a struct or union."
-  (into [] (map (comp #(.getFieldName #^TFieldIdEnum %) key)
-                 (meta-data-map type))))
-
-(defn field-map [type field-name]
+(defn field-id-meta [type field-name]
   "Returns a map of field id and name of the named field"
-  {:id   (.getThriftFieldId #^TFieldIdEnum (get (field-enum-map type) (keyword field-name)))
-   :name field-name  })
+  (when-let [f (field type (keyword field-name))]
+    {:id   (.getThriftFieldId #^TFieldIdEnum f)
+     :name field-name  }))
 
-(defn fields-map [t]
-  "Returns a vector of field maps for a given Thrift type."
-  (mapv (partial field t) (ordered-field-names t)))
+(defn field-meta-list [t]
+  "Returns an ordered vector of field maps for a given Thrift type."
+  (vec (sort-by :id (map (partial field-map t) (field-names t)))))
