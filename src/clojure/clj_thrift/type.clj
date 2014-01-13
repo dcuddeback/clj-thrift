@@ -85,12 +85,14 @@
   (into #{} (map (comp #(.getFieldName #^TFieldIdEnum %) key)
                  (meta-data-map type))))
 
-(defn field-id-meta [type field-name]
+(defn field-id-meta
   "Returns a map of field id and name of the named field"
+  [type field-name]
   (when-let [f (field type (keyword field-name))]
     {:id   (.getThriftFieldId #^TFieldIdEnum f)
      :name field-name  }))
 
-(defn field-meta-list [type]
+(defn field-meta-list
   "Returns an ordered vector of field maps for a given Thrift type."
+  [type]
   (vec (sort-by :id (map (partial field-id-meta type) (field-names type)))))
