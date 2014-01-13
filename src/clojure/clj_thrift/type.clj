@@ -80,8 +80,7 @@
 
 (defn field-names
   "Returns the set of names for the fields of a Thrift type. The function's argument should be
-  the class itself. It works with structs and unions.
-  "
+  the class itself. It works with structs and unions."
   [type]
   (into #{} (map (comp #(.getFieldName #^TFieldIdEnum %) key)
                  (meta-data-map type))))
@@ -92,6 +91,6 @@
     {:id   (.getThriftFieldId #^TFieldIdEnum f)
      :name field-name  }))
 
-(defn field-meta-list [t]
+(defn field-meta-list [type]
   "Returns an ordered vector of field maps for a given Thrift type."
-  (vec (sort-by :id (map (partial field-map t) (field-names t)))))
+  (vec (sort-by :id (map (partial field-id-meta type) (field-names type)))))
