@@ -11,7 +11,7 @@
     (get nil)))
 
 
-(defn-field-enum-map
+(defn- field-enum-map
   [type]
   (into {} (map (juxt (comp keyword #(.getFieldName %))
                       identity)
@@ -23,18 +23,22 @@
                       val)
                 (meta-data-map type))))
 
-(defn- field-meta
-  [type field-name]
-  (get (field-meta-map type) field-name))
-
 (defn- field-value
   [type field-name]
-  (.valueMetaData (field-meta type field-name)))
-
+  (.valueMetaData
+    (get (field-meta-map type)
+         field-name)))
 
 (defn field
   [type field-name]
   (get (field-enum-map type) field-name))
+
+(defn field-meta
+  "Returns a map describing the metadata of the Thrift type's named field."
+  [type field-name]
+  (when-let [f (field type (keyword field-name))]
+    {:id   (.getThriftFieldId #^TFieldIdEnum f)
+     :name field-name  }))
 
 (defn field-type
   [type field-name]
@@ -72,8 +76,7 @@
   this function will return the following:
 
     (field-ids Name)  ; => #{1 2}
-    (field-ids ID)    ; => #{3 4 5}
-  "
+    (field-ids ID)    ; => #{3 4 5}"
   [type]
   (into #{} (map (comp #(.getThriftFieldId #^TFieldIdEnum %) key)
                  (meta-data-map type))))
@@ -85,14 +88,8 @@
   (into #{} (map (comp #(.getFieldName #^TFieldIdEnum %) key)
                  (meta-data-map type))))
 
-(defn field-id-meta
-  "Returns a map of field id and name of the named field"
-  [type field-name]
-  (when-let [f (field type (keyword field-name))]
-    {:id   (.getThriftFieldId #^TFieldIdEnum f)
-     :name field-name  }))
-
 (defn field-meta-list
-  "Returns an ordered vector of field maps for a given Thrift type."
+  "Returns a list of metadata for each field of a given Thrift type."
   [type]
-  (vec (sort-by :id (map (partial field-id-meta type) (field-names type)))))
+  (map (partial field-meta type)
+       (field-names type)))
